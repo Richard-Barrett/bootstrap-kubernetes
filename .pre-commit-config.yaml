@@ -1,0 +1,45 @@
+---
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.26.3
+    hooks:
+      - id: yamllint
+        args: [--config-file=.yamllint.yml]
+
+  - repo: https://github.com/ansible-community/ansible-lint
+    rev: v6.13.0
+    hooks:
+      - id: ansible-lint
+        additional_dependencies: [ansible-lint==6.13.0]
+
+  - repo: https://github.com/willthames/ansible-role-lint
+    rev: v4.1.0
+    hooks:
+      - id: ansible-role-lint
+        name: Ansible Role Lint
+        entry: ansible-role-lint
+        language: system
+        types: [yaml]
+
+  - repo: https://github.com/citation-file-format/check-citation-file.git
+    rev: v1.0.0
+    hooks:
+      - id: check-citation-file
+
+  - repo: https://github.com/terrencepreilly/ansible-jinja2
+    rev: v0.1.0
+    hooks:
+      - id: ansible-jinja2-syntax
+        name: Ansible Jinja2 Syntax Check
+        entry: ansible-jinja2-syntax
+        language: system
+        types: [yaml, jinja]

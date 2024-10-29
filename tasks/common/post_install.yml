@@ -1,0 +1,14 @@
+---
+# tasks/common/post_install.yml
+
+- name: Allow master node to schedule pods
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-
+  become: yes
+  become_user: "{{ k8s_admin_user }}"
+  ignore_errors: yes
+
+- name: Allow master node to schedule pods (for Kubernetes v1.20+)
+  command: kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+  become: yes
+  become_user: "{{ k8s_admin_user }}"
+  ignore_errors: yes

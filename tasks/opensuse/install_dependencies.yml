@@ -1,0 +1,72 @@
+---
+# tasks/suse/install_dependencies.yml
+
+- name: Ensure required packages are installed (SUSE)
+  zypper:
+    name:
+      - curl
+      - ca-certificates
+      - gnupg
+      - lsb-release
+    state: present
+
+- name: Add Kubernetes repository key
+  rpm_key:
+    key: "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
+    state: present
+
+- name: Add Kubernetes repository
+  zypper_repository:
+    name: kubernetes
+    description: Kubernetes Repository
+    baseurl: "https://packages.cloud.google.com/yum/repos/kubernetes-suse-{{ ansible_distribution_major_version }}-x86_64"
+    enabled: yes
+    autorefresh: yes
+    gpgcheck: yes
+    gpgkey:
+      - "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
+
+- name: Refresh zypper repositories
+  command: zypper refresh
+
+- name: Install Kubernetes packages
+  zypper:
+    name:
+      - kubelet-{{ kubernetes_version }}
+      - kubeadm-{{ kubernetes_version }}
+      - kubectl-{{ kubernetes_version }}
+    state: present
+    allow_downgrade: yes
+    update_cache: yes
+  become: yes
+
+- name: Install firewalld
+  zypper:
+    name: firewalld
+    state: present
+
+- name: Enable and start firewalld
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Open necessary ports for Kubernetes
+  firewalld:
+    service: "{{ item }}"
+    state: enabled
+    permanent: yes
+    immediate: yes
+  loop:
+    - ssh
+    - http
+    - https
+    # Add other necessary services/ports as needed
+
+- name: Enable and start kubelet
+  systemd:
+    name: kubelet
+    enabled: yes
+    state: started
+  become: yes

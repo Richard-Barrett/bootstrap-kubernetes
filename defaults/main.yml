@@ -1,0 +1,23 @@
+---
+# defaults/main.yml
+
+kubernetes_version: "1.26.0"
+cni_plugin: "calico"  # Options: calico, flannel, weave
+pod_network_cidr: "192.168.0.0/16"  # Adjust based on CNI requirements
+k8s_admin_user: "{{ ansible_user }}"  # User to configure kube config
+
+# Supported architectures
+supported_architectures:
+  - "x86_64"
+  - "arm64"
+
+# Architecture-specific package mappings
+arch_packages:
+  x86_64:
+    kubelet: "kubelet-{{ kubernetes_version }}"
+    kubeadm: "kubeadm-{{ kubernetes_version }}"
+    kubectl: "kubectl-{{ kubernetes_version }}"
+  arm64:
+    kubelet: "kubelet-{{ kubernetes_version }}"
+    kubeadm: "kubeadm-{{ kubernetes_version }}"
+    kubectl: "kubectl-{{ kubernetes_version }}"

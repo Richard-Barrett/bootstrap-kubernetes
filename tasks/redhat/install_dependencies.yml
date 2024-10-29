@@ -1,0 +1,68 @@
+---
+# tasks/redhat/install_dependencies.yml
+
+- name: Ensure required packages are installed (RedHat)
+  yum:
+    name:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+    state: present
+
+- name: Add Kubernetes YUM repository
+  yum_repository:
+    name: kubernetes
+    description: Kubernetes Repository
+    baseurl: "https://packages.cloud.google.com/yum/repos/kubernetes-{{ ansible_distribution_major_version }}-x86_64"
+    enabled: yes
+    gpgcheck: yes
+    repo_gpgcheck: yes
+    gpgkey:
+      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+- name: Disable SELinux (if necessary)
+  selinux:
+    state: disabled
+  when: ansible_selinux.status == "enabled"
+
+- name: Set SELinux to permissive mode
+  command: setenforce 0
+  when:
+    - ansible_selinux.status == "enabled"
+    - ansible_selinux.mode != "permissive"
+
+- name: Install firewalld
+  yum:
+    name: firewalld
+    state: present
+
+- name: Enable and start firewalld
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Open necessary ports for Kubernetes
+  firewalld:
+    service: "{{ item }}"
+    state: enabled
+    permanent: yes
+    immediate: yes
+  loop:
+    - ssh
+    - http
+    - https
+    # Add other necessary services/ports as needed
+
+- name: Ensure swap is disabled (RedHat)
+  command: swapoff -a
+  become: yes
+
+- name: Ensure swap is disabled in /etc/fstab (RedHat)
+  replace:
+    path: /etc/fstab
+    regexp: '^(.*swap.*)$'
+    replace: '#\1'
+  become: yes

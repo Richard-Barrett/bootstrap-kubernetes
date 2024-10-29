@@ -1,0 +1,24 @@
+---
+# tasks/common/configure_cni.yml
+
+- name: Determine CNI plugin manifest URL based on architecture
+  set_fact:
+    cni_manifest_url: "{{ cni_plugins_arch[cni_plugin][ansible_architecture] | default(cni_plugins[cni_plugin].manifest_url) }}"
+
+- name: Download CNI plugin manifest
+  get_url:
+    url: "{{ cni_manifest_url }}"
+    dest: /tmp/cni_plugin_manifest.yaml
+  delegate_to: localhost
+  run_once: true
+
+- name: Transfer CNI plugin manifest to target nodes
+  copy:
+    src: /tmp/cni_plugin_manifest.yaml
+    dest: /tmp/cni_plugin_manifest.yaml
+
+- name: Apply CNI plugin using kubectl
+  command: kubectl apply -f /tmp/cni_plugin_manifest.yaml
+  become: yes
+  become_user: "{{ k8s_admin_user }}"
+  when: kubeadm_init.rc == 0

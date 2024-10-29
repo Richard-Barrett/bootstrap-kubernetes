@@ -1,0 +1,33 @@
+---
+# meta/main.yml
+
+galaxy_info:
+  role_name: kubernetes
+  author: bootstrap
+  description: Install Kubernetes across various operating systems with configurable CNI plugins.
+  license: MIT
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: EL
+      versions:
+        - "7"
+        - "8"
+        - "9"
+    - name: Ubuntu
+      versions:
+        - focal
+        - bionic
+        - jammy
+    - name: opensuse
+      versions:
+        - "all"
+
+  galaxy_tags:
+    - kubernetes
+    - cni
+    - installation
+    - orchestration
+    - suse
+
+dependencies: []

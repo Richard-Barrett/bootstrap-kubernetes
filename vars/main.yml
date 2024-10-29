@@ -1,0 +1,21 @@
+---
+# vars/main.yml
+
+cni_plugins:
+  calico:
+    manifest_url: "https://docs.projectcalico.org/manifests/calico.yaml"
+  flannel:
+    manifest_url: "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml"
+  weave:
+    manifest_url: "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+cni_plugins_arch:
+  calico:
+    x86_64: "https://docs.projectcalico.org/manifests/calico.yaml"
+    arm64: "https://docs.projectcalico.org/manifests/calico-arm64.yaml"
+  flannel:
+    x86_64: "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml"
+    arm64: "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel-arm64.yml"
+  weave:
+    x86_64: "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+    arm64: "https://cloud.weave.works/k8s/net-arm64?k8s-version=$(kubectl version | base64 | tr -d '\n')"

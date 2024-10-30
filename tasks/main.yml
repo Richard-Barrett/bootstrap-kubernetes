@@ -10,7 +10,7 @@
   when: ansible_os_family == "RedHat"
 
 - name: Install Kubernetes Dependencies (SUSE-based)
-  ansible.builtin.include_tasks: suse/install_dependencies.yml
+  ansible.builtin.include_tasks: opensuse/install_dependencies.yml
   when: ansible_os_family == "Suse"
 
 - name: Install Kubernetes Dependencies (Architecture-specific)

@@ -26,3 +26,4 @@
   become: true
   become_user: "{{ k8s_admin_user }}"
   when: kubeadm_init.rc == 0
+  changed_when: false

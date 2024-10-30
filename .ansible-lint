@@ -2,5 +2,5 @@
 exclude_paths:
   - '.github/'
   - 'examples/'
-skip_lists:
+skip_list:
   - 'yaml'

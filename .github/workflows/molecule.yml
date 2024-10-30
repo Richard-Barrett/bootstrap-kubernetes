@@ -28,4 +28,4 @@ jobs:
           ansible-galaxy collection install -r requirements.yml
 
       - name: Molecule
-        uses: monolithprojects/action-molecule@v1.4.1
+        uses: monolithprojects/action-molecule@v1.5.0

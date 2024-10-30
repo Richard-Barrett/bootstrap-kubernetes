@@ -2,13 +2,19 @@
 # tasks/common/post_install.yml
 
 - name: Allow master node to schedule pods
-  command: kubectl taint nodes --all node-role.kubernetes.io/master-
-  become: yes
+  ansible.builtin.command:
+    cmd: kubectl taint nodes --all node-role.kubernetes.io/master-
+  become: true
   become_user: "{{ k8s_admin_user }}"
-  ignore_errors: yes
+  failed_when: "'No resources found' not in taint_result.stderr"
+  register: taint_result
+  ignore_errors: true  # Retain for idempotency, but use failed_when for specific failures
 
 - name: Allow master node to schedule pods (for Kubernetes v1.20+)
-  command: kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-  become: yes
+  ansible.builtin.command:
+    cmd: kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+  become: true
   become_user: "{{ k8s_admin_user }}"
-  ignore_errors: yes
+  failed_when: "'No resources found' not in taint_result_control.stderr"
+  register: taint_result_control
+  ignore_errors: true

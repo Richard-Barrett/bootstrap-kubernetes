@@ -2,7 +2,7 @@
 # tasks/arch/install_dependencies.yml
 
 - name: Validate supported architecture
-  fail:
+  ansible.builtin.fail:
     msg: "Architecture '{{ ansible_architecture }}' is not supported by this role."
   when: ansible_architecture not in supported_architectures
 
@@ -10,9 +10,10 @@
 # For example, if arm64 requires additional repositories or packages.
 
 - name: Install additional packages for arm64
-  when: ansible_architecture == "arm64"
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   loop:
     - some-arm64-specific-package  # Replace with actual package names if needed
+  when: ansible_architecture == "arm64"
+  

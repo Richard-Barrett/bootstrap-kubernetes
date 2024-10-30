@@ -2,7 +2,7 @@
 # tasks/suse/install_dependencies.yml
 
 - name: Ensure required packages are installed (SUSE)
-  zypper:
+  ansible.builtin.zypper:
     name:
       - curl
       - ca-certificates
@@ -11,62 +11,66 @@
     state: present
 
 - name: Add Kubernetes repository key
-  rpm_key:
+  ansible.builtin.rpm_key:
     key: "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
     state: present
 
 - name: Add Kubernetes repository
-  zypper_repository:
+  ansible.builtin.zypper_repository:
     name: kubernetes
     description: Kubernetes Repository
     baseurl: "https://packages.cloud.google.com/yum/repos/kubernetes-suse-{{ ansible_distribution_major_version }}-x86_64"
-    enabled: yes
-    autorefresh: yes
-    gpgcheck: yes
+    enabled: true
+    autorefresh: true
+    gpgcheck: true
     gpgkey:
       - "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
 
 - name: Refresh zypper repositories
-  command: zypper refresh
+  ansible.builtin.command:
+    cmd: zypper refresh
+  changed_when: false  # Prevents unnecessary changes
 
 - name: Install Kubernetes packages
-  zypper:
+  ansible.builtin.zypper:
     name:
       - kubelet-{{ kubernetes_version }}
       - kubeadm-{{ kubernetes_version }}
       - kubectl-{{ kubernetes_version }}
     state: present
-    allow_downgrade: yes
-    update_cache: yes
-  become: yes
+    allow_downgrade: true
+    update_cache: true
 
 - name: Install firewalld
-  zypper:
+  ansible.builtin.zypper:
     name: firewalld
     state: present
 
 - name: Enable and start firewalld
-  systemd:
+  ansible.builtin.systemd:
     name: firewalld
-    enabled: yes
+    enabled: true
     state: started
-  become: yes
 
 - name: Open necessary ports for Kubernetes
-  firewalld:
+  ansible.posix.firewalld:
     service: "{{ item }}"
     state: enabled
-    permanent: yes
-    immediate: yes
+    permanent: true
+    immediate: true
   loop:
     - ssh
     - http
     - https
     # Add other necessary services/ports as needed
 
-- name: Enable and start kubelet
-  systemd:
-    name: kubelet
-    enabled: yes
-    state: started
-  become: yes
+- name: Ensure swap is disabled (SUSE)
+  ansible.builtin.command:
+    cmd: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: Ensure swap is disabled in /etc/fstab (SUSE)
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^(.*swap.*)$'
+    replace: '#\1'

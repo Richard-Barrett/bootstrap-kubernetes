@@ -2,7 +2,7 @@
 # tasks/redhat/install_dependencies.yml
 
 - name: Ensure required packages are installed (RedHat)
-  yum:
+  ansible.builtin.yum:
     name:
       - yum-utils
       - device-mapper-persistent-data
@@ -10,7 +10,7 @@
     state: present
 
 - name: Add Kubernetes YUM repository
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: kubernetes
     description: Kubernetes Repository
     baseurl: "https://packages.cloud.google.com/yum/repos/kubernetes-{{ ansible_distribution_major_version }}-x86_64"
@@ -22,34 +22,33 @@
       - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 
 - name: Disable SELinux (if necessary)
-  selinux:
+  ansible.posix.selinux:
     state: disabled
   when: ansible_selinux.status == "enabled"
 
 - name: Set SELinux to permissive mode
-  command: setenforce 0
+  ansible.builtin.command: setenforce 0
   when:
     - ansible_selinux.status == "enabled"
     - ansible_selinux.mode != "permissive"
 
 - name: Install firewalld
-  yum:
+  ansible.builtin.yum:
     name: firewalld
     state: present
 
 - name: Enable and start firewalld
-  systemd:
+  ansible.builtin.systemd:
     name: firewalld
-    enabled: yes
+    enabled: true
     state: started
-  become: yes
 
 - name: Open necessary ports for Kubernetes
-  firewalld:
+  ansible.posix.firewalld:
     service: "{{ item }}"
     state: enabled
-    permanent: yes
-    immediate: yes
+    permanent: true
+    immediate: true
   loop:
     - ssh
     - http
@@ -57,12 +56,12 @@
     # Add other necessary services/ports as needed
 
 - name: Ensure swap is disabled (RedHat)
-  command: swapoff -a
-  become: yes
+  ansible.builtin.command:
+    cmd: swapoff -a
+  when: ansible_swaptotal_mb > 0
 
 - name: Ensure swap is disabled in /etc/fstab (RedHat)
-  replace:
+  ansible.builtin.replace:
     path: /etc/fstab
     regexp: '^(.*swap.*)$'
     replace: '#\1'
-  become: yes

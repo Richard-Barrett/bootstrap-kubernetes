@@ -2,6 +2,11 @@
 
 # Ansible Role: bootstrap-kubernetes
 
+[![Ansible Lint](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/ansible-lint.yml)
+[![CodeQL](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/codeql.yaml/badge.svg)](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/codeql.yaml)
+[![Molecule Test](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/molecule.yml/badge.svg)](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/molecule.yml)
+[![Trivy Scan](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/trivy.yaml/badge.svg)](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/trivy.yaml)
+
 - `Description`: An Ansible Role to Bootstrap Kubernetes on BareMetal/Virtual Machines
 
 - `Overview`: An Ansible role to install Kubernetes across various operating systems and CPU architectures in a controlled, versioned manner with configurable CNI plugins.

@@ -2,26 +2,26 @@
 # tasks/main.yml
 
 - name: Install Kubernetes Dependencies (Debian-based)
-  include_tasks: debian/install_dependencies.yml
+  ansible.builtin.include_tasks: debian/install_dependencies.yml
   when: ansible_os_family == "Debian"
 
 - name: Install Kubernetes Dependencies (RedHat-based)
-  include_tasks: redhat/install_dependencies.yml
+  ansible.builtin.include_tasks: redhat/install_dependencies.yml
   when: ansible_os_family == "RedHat"
 
 - name: Install Kubernetes Dependencies (SUSE-based)
-  include_tasks: suse/install_dependencies.yml
+  ansible.builtin.include_tasks: suse/install_dependencies.yml
   when: ansible_os_family == "Suse"
 
 - name: Install Kubernetes Dependencies (Architecture-specific)
-  include_tasks: arch/install_dependencies.yml
+  ansible.builtin.include_tasks: arch/install_dependencies.yml
   when: ansible_architecture in supported_architectures
 
 - name: Install Kubernetes Packages and Configure Systemd
-  include_tasks: common/install_kubernetes.yml
+  ansible.builtin.include_tasks: common/install_kubernetes.yml
 
 - name: Configure CNI Plugin
-  include_tasks: common/configure_cni.yml
+  ansible.builtin.include_tasks: common/configure_cni.yml
 
 - name: Post-installation Configuration
-  include_tasks: common/post_install.yml
+  ansible.builtin.include_tasks: common/post_install.yml

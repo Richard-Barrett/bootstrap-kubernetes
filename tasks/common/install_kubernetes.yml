@@ -2,59 +2,61 @@
 # tasks/common/install_kubernetes.yml
 
 - name: Install Kubernetes packages based on architecture
-  package:
+  ansible.builtin.package:
     name:
       - "{{ arch_packages[ansible_architecture].kubelet }}"
       - "{{ arch_packages[ansible_architecture].kubeadm }}"
       - "{{ arch_packages[ansible_architecture].kubectl }}"
     state: present
-    allow_downgrade: yes
-    update_cache: yes
-  become: yes
+    allow_downgrade: true
+    update_cache: true
+  become: true
 
 - name: Enable and start kubelet
-  systemd:
+  ansible.builtin.systemd:
     name: kubelet
-    enabled: yes
+    enabled: true
     state: started
-  become: yes
+  become: true
 
 - name: Disable swap
-  command: swapoff -a
-  become: yes
-  ignore_errors: yes
+  ansible.builtin.command:
+    cmd: swapoff -a
+  become: true
+  when: ansible_swaptotal_mb > 0
 
 - name: Ensure swap is disabled in /etc/fstab
-  replace:
+  ansible.builtin.replace:
     path: /etc/fstab
     regexp: '^(.*swap.*)$'
     replace: '#\1'
-  become: yes
+  become: true
 
 - name: Initialize Kubernetes cluster
-  command: kubeadm init --kubernetes-version {{ kubernetes_version }} --pod-network-cidr={{ pod_network_cidr }}
+  ansible.builtin.command:
+    cmd: kubeadm init --kubernetes-version {{ kubernetes_version }} --pod-network-cidr={{ pod_network_cidr }}
   args:
     creates: /etc/kubernetes/admin.conf
   register: kubeadm_init
-  become: yes
-  ignore_errors: yes
+  become: true
+  failed_when: kubeadm_init.rc != 0 and "'already exists'" not in kubeadm_init.stderr
 
 - name: Create .kube directory for admin user
-  file:
-    path: /home/{{ k8s_admin_user }}/.kube
+  ansible.builtin.file:
+    path: "/home/{{ k8s_admin_user }}/.kube"
     state: directory
     owner: "{{ k8s_admin_user }}"
     group: "{{ k8s_admin_user }}"
     mode: '0755'
-  become: yes
+  become: true
   when: kubeadm_init.rc == 0
 
 - name: Copy admin.conf to user's kube config
-  copy:
+  ansible.builtin.copy:
     src: /etc/kubernetes/admin.conf
-    dest: /home/{{ k8s_admin_user }}/.kube/config
+    dest: "/home/{{ k8s_admin_user }}/.kube/config"
     owner: "{{ k8s_admin_user }}"
     group: "{{ k8s_admin_user }}"
     mode: '0644'
-  become: yes
+  become: true
   when: kubeadm_init.rc == 0

@@ -20,4 +20,4 @@ jobs:
       uses: bridgecrewio/checkov-action@v12
       with:
         directory: "."  # Root directory or specify path to Ansible playbooks
-        skip_path: "molecule/,.github/"  # Optional: Use to skip irrelevant checks (e.g., AWS-specific)
+        skip_path: "molecule/, .github/"  # Optional: Use to skip irrelevant checks (e.g., AWS-specific)

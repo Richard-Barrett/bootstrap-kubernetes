@@ -31,4 +31,4 @@ jobs:
 
     - name: 'Run Molecule Test'
       run: molecule test
-      working-directory: ./molecule/default/molecule.yml  # Adjust to the path of molecule.yml
+      working-directory: ./molecule/default  # Adjust to the path of molecule.yml

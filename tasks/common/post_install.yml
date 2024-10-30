@@ -8,6 +8,7 @@
   become_user: "{{ k8s_admin_user }}"
   failed_when: "'No resources found' not in taint_result.stderr"
   register: taint_result
+  changed_when: false
   ignore_errors: true  # Retain for idempotency, but use failed_when for specific failures
 
 - name: Allow master node to schedule pods (for Kubernetes v1.20+)
@@ -17,4 +18,5 @@
   become_user: "{{ k8s_admin_user }}"
   failed_when: "'No resources found' not in taint_result_control.stderr"
   register: taint_result_control
+  changed_when: false
   ignore_errors: true

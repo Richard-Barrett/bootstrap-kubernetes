@@ -9,6 +9,7 @@
   ansible.builtin.get_url:
     url: "{{ cni_manifest_url }}"
     dest: /tmp/cni_plugin_manifest.yaml
+    mode: '0644'
   delegate_to: localhost
   run_once: true
 
@@ -17,6 +18,7 @@
     src: /tmp/cni_plugin_manifest.yaml
     dest: /tmp/cni_plugin_manifest.yaml
     mode: '0644'
+  changed_when: false
 
 - name: Apply CNI plugin using kubectl
   ansible.builtin.command:

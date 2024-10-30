@@ -2,7 +2,7 @@
 # tasks/redhat/install_dependencies.yml
 
 - name: Ensure required packages are installed (RedHat)
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name:
       - yum-utils
       - device-mapper-persistent-data
@@ -25,15 +25,17 @@
   ansible.posix.selinux:
     state: disabled
   when: ansible_selinux.status == "enabled"
+  changed_when: false
 
 - name: Set SELinux to permissive mode
   ansible.builtin.command: setenforce 0
   when:
     - ansible_selinux.status == "enabled"
     - ansible_selinux.mode != "permissive"
+  changed_when: false
 
 - name: Install firewalld
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: firewalld
     state: present
 
@@ -59,6 +61,7 @@
   ansible.builtin.command:
     cmd: swapoff -a
   when: ansible_swaptotal_mb > 0
+  changed_when: false
 
 - name: Ensure swap is disabled in /etc/fstab (RedHat)
   ansible.builtin.replace:

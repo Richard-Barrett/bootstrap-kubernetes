@@ -68,6 +68,7 @@
   ansible.builtin.command:
     cmd: swapoff -a
   when: ansible_swaptotal_mb > 0
+  changed_when: false
 
 - name: Ensure swap is disabled in /etc/fstab (SUSE)
   ansible.builtin.replace:

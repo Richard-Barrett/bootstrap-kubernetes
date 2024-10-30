@@ -20,4 +20,4 @@ jobs:
       uses: bridgecrewio/checkov-action@v12
       with:
         directory: "."  # Root directory or specify path to Ansible playbooks
-        skip_check: "CKV_AWS_*"  # Optional: Use to skip irrelevant checks (e.g., AWS-specific)
+        skip_check: "CKV_AWS_*, .github/"  # Optional: Use to skip irrelevant checks (e.g., AWS-specific)

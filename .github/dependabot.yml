@@ -1,11 +1,22 @@
 ---
 version: 2
 updates:
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+
+  # Terraform dependencies
   - package-ecosystem: "terraform"
     directory: "/"
     schedule:
       interval: "weekly"
+
+  # Python dependencies for Ansible (e.g., ansible-lint, molecule)
+  - package-ecosystem: "pip"
+    directory: "/"  # Specify the directory with requirements.txt or requirements.yml
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "ansible"  # Optionally, exclude specific packages

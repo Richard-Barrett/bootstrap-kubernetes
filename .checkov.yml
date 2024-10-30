@@ -1,0 +1,5 @@
+---
+# Ignore specific paths (e.g., tests or documentation folders)
+skip_paths:
+  - molecule/
+  - .github/

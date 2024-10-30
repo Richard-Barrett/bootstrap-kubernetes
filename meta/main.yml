@@ -1,8 +1,8 @@
 ---
 # meta/main.yml
-
 galaxy_info:
-  role_name: kubernetes
+  role_name: bootstrap_kubernetes
+  namespace: system
   author: bootstrap
   description: Install Kubernetes across various operating systems with configurable CNI plugins.
   license: MIT

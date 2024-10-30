@@ -3,4 +3,4 @@
 - name: Converge
   hosts: all
   roles:
-    - role: system.bootstrap_kubernetes
+    - { role: "../../", name: "system.bootstrap_kubernetes" }

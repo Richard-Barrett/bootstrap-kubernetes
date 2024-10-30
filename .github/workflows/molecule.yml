@@ -28,8 +28,8 @@ jobs:
 
     - name: 'Install Docker'
       run: |
-        sudo apt-get update
-        sudo apt-get install -y docker.io
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
         sudo usermod -aG docker $USER
 
     - name: 'Start Docker'
@@ -40,4 +40,3 @@ jobs:
 
     - name: 'Run Molecule Test'
       run: molecule test
-

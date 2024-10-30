@@ -1,6 +1,6 @@
 <img align="right" width="60" height="60" src="https://github.com/devicons/devicon/blob/master/icons/ansible/ansible-plain-wordmark.svg">
 
-# Ansible Role: bootstrap-kubernetes
+# Ansible Role: system.bootstrap_kubernetes
 
 [![Ansible Lint](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/ansible-lint.yml)
 [![CodeQL](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/codeql.yaml/badge.svg)](https://github.com/Richard-Barrett/bootstrap-kubernetes/actions/workflows/codeql.yaml)

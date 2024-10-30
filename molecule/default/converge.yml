@@ -3,4 +3,4 @@
 - name: Converge
   hosts: all
   roles:
-    - role: system.bootstap_kubernetes  # Replace with the actual role name
+    - role: system.bootstrap_kubernetes

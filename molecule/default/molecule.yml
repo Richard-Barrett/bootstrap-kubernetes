@@ -3,12 +3,11 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: delegated
 platforms:
-  - name: instance
-    image: "python:3.9"  # Specify a base image
-    privileged: true
-    pre_build_image: true
+  - name: localhost
+    address: 127.0.0.1
+    managed: False  # Prevents Molecule from trying to manage instance creation/deletion
 provisioner:
   name: ansible
   lint:
@@ -17,7 +16,6 @@ scenario:
   name: default
   test_sequence:
     - lint
-    - destroy
     - dependency
     - create
     - converge
@@ -26,3 +24,4 @@ scenario:
     - destroy
 verifier:
   name: ansible
+

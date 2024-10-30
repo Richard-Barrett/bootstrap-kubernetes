@@ -29,5 +29,8 @@ jobs:
     - name: 'Set up Docker Buildx'
       uses: docker/setup-buildx-action@v2
 
+    - name: 'Start Docker'
+      run: sudo service docker start
+
     - name: 'Run Molecule Test'
       run: molecule test

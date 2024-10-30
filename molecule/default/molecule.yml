@@ -7,7 +7,7 @@ driver:
 platforms:
   - name: localhost
     address: 127.0.0.1
-    managed: False  # Prevents Molecule from trying to manage instance creation/deletion
+    managed: False  # Prevents Molecule from trying to manage instance creation
 provisioner:
   name: ansible
   lint:
@@ -24,4 +24,3 @@ scenario:
     - destroy
 verifier:
   name: ansible
-

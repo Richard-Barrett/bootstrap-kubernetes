@@ -14,4 +14,4 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.AUTOMATION_PAT }}
       - name: 'Ansible Lint'
-        uses: ansible/ansible-lint@v24.9.2
+        uses: ansible/ansible-lint@v25.9.1
